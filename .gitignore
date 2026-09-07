@@ -1,0 +1,12 @@
+# Local game inputs and generated release artifacts must never enter Git.
+/.tools/
+/artifacts/
+/data/
+/inputs/
+/reference/
+/tests/
+/tools/
+
+# Python build by-products
+__pycache__/
+*.py[cod]

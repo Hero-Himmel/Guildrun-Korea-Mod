@@ -1,0 +1,17 @@
+{
+  "asset_name_pattern": "NotoSans(?:SC|TC)-(.+)",
+  "expected_count": 18,
+  "font_family": "Noto Sans KR",
+  "source": "https://github.com/notofonts/noto-cjk/tree/main/Sans/SubsetOTF/KR",
+  "weight_files": {
+    "Black": "NotoSansKR-Black.otf",
+    "Bold": "NotoSansKR-Bold.otf",
+    "ExtraBold": "NotoSansKR-Black.otf",
+    "ExtraLight": "NotoSansKR-Light.otf",
+    "Light": "NotoSansKR-DemiLight.otf",
+    "Medium": "NotoSansKR-Medium.otf",
+    "Regular": "NotoSansKR-Regular.otf",
+    "SemiBold": "NotoSansKR-Bold.otf",
+    "Thin": "NotoSansKR-Thin.otf"
+  }
+}

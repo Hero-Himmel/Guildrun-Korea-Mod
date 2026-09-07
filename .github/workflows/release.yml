@@ -1,0 +1,46 @@
+name: Release Korean Patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - main/**
+      - .github/workflows/release.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install release build dependencies
+        run: python -m pip install -r main/requirements-release.txt
+
+      - name: Build runtime patch release
+        run: python main/tool/package_release.py
+
+      - name: Verify release contents
+        run: python main/tool/verify_release.py
+
+      - name: Publish GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content main/resource/version.json -Raw | ConvertFrom-Json).release
+          $tag = "v$version"
+          $asset = "artifacts/Guildrun-Korean-$version.zip"
+          gh release view $tag 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $tag $asset --clobber
+          } else {
+            gh release create $tag $asset --title "Guildrun Korean Patch $version" --generate-notes
+          }
