@@ -30,21 +30,10 @@ Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 �
 - `resource/guildrun-korean-source.json` — 버전·번역문·Unity 메타데이터를 포함한 원본
 - `resource/version.json` — 게임 버전·대상 빌드·패치 릴리즈 버전의 단일 기준
 
-게임 원본 4개는 저장소와 Release에 넣지 않습니다. Release ZIP에는 실행에 필요한 번역·폰트까지
-내장한 `GuildrunKoreanPatcher.exe` 한 파일만 들어 있습니다. 설치기는 사용자의 Steam 설치본 원본
-4개 해시를 검사한 뒤 임시 폴더에서 한국어 파일을 생성합니다.
-
-기본 Steam 경로가 있으면 설치기가 바로 호환성 검사를 진행하고, 없을 때만 게임 경로를 묻습니다.
-호환성 테스트 뒤에는 주의사항과 `1. Yes / 2. No` 확인을 표시합니다. `No`를 고르면 게임 파일을
-변경하지 않고 종료합니다.
-
 ## OFL
 
 이 패치에는 Noto Sans KR 폰트가 포함되어 있으며, 해당 폰트는
 [SIL Open Font License 1.1](https://openfontlicense.org/open-font-license-official-text/)에 따라 배포됩니다.
-
-저장소 파일 또는 Release 워크플로 파일을 main 브랜치에 push하면 GitHub Actions가 EXE와 ZIP을 만들고,
-`version.json`의 `release` 값을 태그로 GitHub Release에 올립니다. 게임 원본 파일은 이 과정에도 포함되지 않습니다.
 
 ## 참고 및 감사
 
