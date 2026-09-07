@@ -2,6 +2,22 @@
 
 Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 패치입니다.
 
+## 설치 방법
+
+1. GitHub Release에서 `GuildrunKoreanPatcher.exe`를 내려받아 실행합니다.
+2. 일반적인 Steam 설치 환경이라면 아래 게임 경로를 자동으로 찾고 설치를 진행합니다.
+
+   ```text
+   C:\Program Files (x86)\Steam\steamapps\common\Guildrun Demo
+   ```
+
+3. 게임을 다른 드라이브나 Steam 라이브러리에 설치했다면, 패처가 묻는 입력란에 `Guildrun.exe`가 있는
+   게임 폴더 주소를 직접 입력합니다.
+
+이미 한글 패치를 적용했거나 게임이 업데이트되어 호환성 테스트에 실패했다면, 먼저
+[Steam 게임 파일 무결성 검사 안내](https://help.steampowered.com/ko/faqs/view/0C48-FCBD-DA71-93EB)를 따라
+게임 파일을 복구하세요. 이후 게임 버전에 맞는 최신 한글 패치 EXE를 내려받아 다시 적용하면 됩니다.
+
 ## 폴더 구조
 
 - `tool/unity_patch.py` — Unity 번들·폰트·메타데이터·카탈로그 가공
@@ -21,6 +37,11 @@ Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 �
 기본 Steam 경로가 있으면 설치기가 바로 호환성 검사를 진행하고, 없을 때만 게임 경로를 묻습니다.
 호환성 테스트 뒤에는 주의사항과 `1. Yes / 2. No` 확인을 표시합니다. `No`를 고르면 게임 파일을
 변경하지 않고 종료합니다.
+
+## OFL
+
+이 패치에는 Noto Sans KR 폰트가 포함되어 있으며, 해당 폰트는
+[SIL Open Font License 1.1](https://openfontlicense.org/open-font-license-official-text/)에 따라 배포됩니다.
 
 `main` 또는 Release 워크플로 파일을 main 브랜치에 push하면 GitHub Actions가 EXE와 ZIP을 만들고,
 `version.json`의 `release` 값을 태그로 GitHub Release에 올립니다. 게임 원본 파일은 이 과정에도 포함되지 않습니다.
