@@ -43,7 +43,7 @@ Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 �
 이 패치에는 Noto Sans KR 폰트가 포함되어 있으며, 해당 폰트는
 [SIL Open Font License 1.1](https://openfontlicense.org/open-font-license-official-text/)에 따라 배포됩니다.
 
-`main` 또는 Release 워크플로 파일을 main 브랜치에 push하면 GitHub Actions가 EXE와 ZIP을 만들고,
+저장소 파일 또는 Release 워크플로 파일을 main 브랜치에 push하면 GitHub Actions가 EXE와 ZIP을 만들고,
 `version.json`의 `release` 값을 태그로 GitHub Release에 올립니다. 게임 원본 파일은 이 과정에도 포함되지 않습니다.
 
 ## 참고 및 감사

@@ -9,16 +9,15 @@ from pathlib import Path
 
 
 TOOL_ROOT = Path(__file__).resolve().parent
-MAIN_ROOT = TOOL_ROOT.parent
-REPO_ROOT = MAIN_ROOT.parent
-RESOURCE_ROOT = MAIN_ROOT / "resource"
+PROJECT_ROOT = TOOL_ROOT.parent
+RESOURCE_ROOT = PROJECT_ROOT / "resource"
 VERSION = json.loads((RESOURCE_ROOT / "version.json").read_text(encoding="utf-8"))
 RELEASE = VERSION["release"]
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Verify a source-only runtime patch release.")
-    parser.add_argument("--output-root", type=Path, default=REPO_ROOT / "artifacts")
+    parser.add_argument("--output-root", type=Path, default=PROJECT_ROOT / "artifacts")
     args = parser.parse_args()
     output_root = args.output_root.resolve()
     release = output_root / f"Guildrun-Korean-{RELEASE}"

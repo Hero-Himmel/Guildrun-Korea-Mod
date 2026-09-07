@@ -17,7 +17,7 @@ MAIN_ROOT = (
     if getattr(sys, "frozen", False)
     else TOOL_ROOT.parent
 )
-ROOT = MAIN_ROOT.parent
+ROOT = MAIN_ROOT
 RESOURCE_ROOT = MAIN_ROOT / "resource"
 GAME_ROOT = RESOURCE_ROOT
 FONT_ROOT = RESOURCE_ROOT / "fonts"

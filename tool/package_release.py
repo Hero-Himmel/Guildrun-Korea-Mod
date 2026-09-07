@@ -12,9 +12,8 @@ from pathlib import Path
 
 
 TOOL_ROOT = Path(__file__).resolve().parent
-MAIN_ROOT = TOOL_ROOT.parent
-REPO_ROOT = MAIN_ROOT.parent
-RESOURCE_ROOT = MAIN_ROOT / "resource"
+PROJECT_ROOT = TOOL_ROOT.parent
+RESOURCE_ROOT = PROJECT_ROOT / "resource"
 ICON_PATH = RESOURCE_ROOT / "icons" / "GuildrunKoreanPatcher.ico"
 sys.path.insert(0, str(TOOL_ROOT))
 from build_patch import RELEASE
@@ -62,7 +61,7 @@ def build_runtime_executable(build_root: Path) -> Path:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build the GitHub Release runtime patcher ZIP.")
-    parser.add_argument("--output-root", type=Path, default=REPO_ROOT / "artifacts")
+    parser.add_argument("--output-root", type=Path, default=PROJECT_ROOT / "artifacts")
     parser.add_argument("--rebuild", action="store_true")
     args = parser.parse_args()
 
