@@ -30,7 +30,7 @@ for required_version_key in ("game", "game_version", "target_build", "release"):
 RELEASE = VERSION["release"]
 GAME_VERSION = VERSION["game_version"]
 TARGET_BUILD = VERSION["target_build"]
-OUTPUT_ROOT = ROOT / "artifacts" / "Guildrun-Korean-Port-0.5.7"
+OUTPUT_ROOT = ROOT / "artifacts" / f"Guildrun-Korean-Port-{RELEASE}"
 
 RELATIVE = {
     "resources": Path("Guildrun_Data/resources.assets"),

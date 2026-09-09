@@ -1,18 +1,20 @@
 {
   "format": 1,
   "game": "Guildrun Demo",
-  "game_version": "0.5.7",
-  "target_build": "25119884",
-  "release": "0.5.7-a",
+  "game_version": "0.5.8",
+  "target_build": "25188298",
+  "release": "0.5.8-a",
   "source_files": {
     "Guildrun_Data/resources.assets": [
       "34ebd49ff66030f6c5a95d266383f8e605179347d0f7da9c0a3c4e435ac70346",
       "4aa5a60d8dff860aec042c9b646aeb4eb8662c70fe1737621b3d9dc49ff89bad",
-      "19e09b9a3d8e6715a064abc80cf66e20e4ab867e4862aadbc7f7fbd52c5d3f9f"
+      "19e09b9a3d8e6715a064abc80cf66e20e4ab867e4862aadbc7f7fbd52c5d3f9f",
+      "ecfc017d34f24336b6c56f32b7dd0a9f571ae0b157ae2304ce37362a240136cf"
     ],
     "Guildrun_Data/il2cpp_data/Metadata/global-metadata.dat": [
       "a25e9704977ada34db8508ebd6b57e5ca1ac293b4e28df452d0f7d70dafec1b8",
-      "3aff1f4877ebe9f8ce5f7b280a0e40a8d0fbc257ee01d1732f2d4315980ebc2e"
+      "3aff1f4877ebe9f8ce5f7b280a0e40a8d0fbc257ee01d1732f2d4315980ebc2e",
+      "b7cde19533732c84c00a378c8ce4b03f80a7faea5969d6c3e53277f933f91a5c"
     ],
     "Guildrun_Data/StreamingAssets/aa/catalog.bin": [
       "3140df6dca7220685e0120130dba34c6f398fda0e0d25c5439a74fb7b19f914f",
