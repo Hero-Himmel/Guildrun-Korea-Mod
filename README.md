@@ -4,7 +4,8 @@ Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 �
 
 ## 설치 방법
 
-1. GitHub Release에서 `GuildrunKoreanPatcher.exe`를 내려받아 실행합니다.
+1. GitHub Release에서 최신 `Guildrun-Korean-<버전>.zip`을 내려받아 압축을 풀고,
+   안에 있는 `GuildrunKoreanPatcher.exe`를 실행합니다.
 2. 일반적인 Steam 설치 환경이라면 아래 게임 경로를 자동으로 찾고 설치를 진행합니다.
 
    ```text
@@ -16,7 +17,7 @@ Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 �
 
 이미 한글 패치를 적용했거나 게임이 업데이트되어 호환성 테스트에 실패했다면, 먼저
 [Steam 게임 파일 무결성 검사 안내](https://help.steampowered.com/ko/faqs/view/0C48-FCBD-DA71-93EB)를 따라
-게임 파일을 복구하세요. 이후 게임 버전에 맞는 최신 한글 패치 EXE를 내려받아 다시 적용하면 됩니다.
+게임 파일을 복구하세요. 이후 게임 버전에 맞는 최신 한글 패치 ZIP을 내려받아 압축을 풀고 다시 적용하면 됩니다.
 
 ## 폴더 구조
 
