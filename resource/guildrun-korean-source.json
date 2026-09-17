@@ -1,8 +1,8 @@
 {
   "format": 1,
   "game": "Guildrun Demo",
-  "game_version": "0.5.8",
-  "target_build": "25188298",
+  "game_version": "0.5.9",
+  "target_build": "25323618",
   "locale": {
     "code": "zh-Hans",
     "display_name": "한국어（MOD）"
@@ -22409,9 +22409,9 @@
       "table": "Relics",
       "key": "Relics.Relic_3007.Description",
       "shared_table_id": "567296588268537852",
-      "english": "For [Rush ({0}),]<rush> [Assassins]<assassin> gain [{1} Crit]<crit> and [Stealth]<stealth>.",
-      "korean": "[러쉬 ({0}),] 동안 [암살자]는 [{1} 치명]과 [은신]을 얻습니다.",
-      "source": "legacy_patch",
+      "english": "At [start of combat,]<bold> [Assassins]<assassin> gain [Stealth]<stealth> for {0} seconds.\n\nFor [Rush ({1}),]<rush> [Assassins]<assassin> gain [{2} Crit]<crit>.",
+      "korean": "[전투 시작 시,]<bold> [암살자]<assassin>가 {0}초 동안 [은신]<stealth>을 얻습니다.\n\n[러쉬 ({1})]<rush> 동안 [암살자]<assassin>가 [{2} 치명]<crit>을 얻습니다.",
+      "source": "manual_current",
       "metadata": {
         "m_Items": [
           {
