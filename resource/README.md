@@ -20,10 +20,11 @@
 ## `format` 값
 
 `format`은 패치나 게임의 버전이 아니라 `version.json`의 데이터 구조 규격 번호입니다.
-현재 `format: 1`은 아래 필드와 의미를 사용하는 첫 번째 규격이라는 뜻입니다.
+현재 `format: 2`는 운영체제별 원본 파일 경로와 해시를 구분합니다.
 
 ```text
-game, game_version, target_build, release, source_files
+game, game_version, target_build, release
+source_files.windows, source_files.macos
 ```
 
 번역 추가, 폰트 교체, 해시 추가, `release` 변경에는 `format` 값을 올리지 않습니다.

@@ -1,36 +1,52 @@
 {
-  "format": 1,
+  "format": 2,
   "game": "Guildrun Demo",
   "game_version": "0.5.9",
   "target_build": "25323618",
-  "release": "0.5.9-a",
+  "release": "0.5.9-b",
   "source_files": {
-    "Guildrun_Data/resources.assets": [
-      "34ebd49ff66030f6c5a95d266383f8e605179347d0f7da9c0a3c4e435ac70346",
-      "4aa5a60d8dff860aec042c9b646aeb4eb8662c70fe1737621b3d9dc49ff89bad",
-      "19e09b9a3d8e6715a064abc80cf66e20e4ab867e4862aadbc7f7fbd52c5d3f9f",
-      "ecfc017d34f24336b6c56f32b7dd0a9f571ae0b157ae2304ce37362a240136cf",
-      "98ef49015502b820512ee66fb82dafa5caab7dfc3aeacab1ee8723add1aa6128"
-    ],
-    "Guildrun_Data/il2cpp_data/Metadata/global-metadata.dat": [
-      "a25e9704977ada34db8508ebd6b57e5ca1ac293b4e28df452d0f7d70dafec1b8",
-      "3aff1f4877ebe9f8ce5f7b280a0e40a8d0fbc257ee01d1732f2d4315980ebc2e",
-      "b7cde19533732c84c00a378c8ce4b03f80a7faea5969d6c3e53277f933f91a5c",
-      "d711a4d87ad0f7751cf692dce9e9bf5e5ac656be1668013ca13c80397beb4fb6"
-    ],
-    "Guildrun_Data/StreamingAssets/aa/catalog.bin": [
-      "3140df6dca7220685e0120130dba34c6f398fda0e0d25c5439a74fb7b19f914f",
-      "80a47c9f8dc2cb85f7dad8a25e48a9a9cc25397d3616cfb6f206398cd6c0762a",
-      "c5b4016b54c1c95f9b2dc7fa9910ef345dd87d5a5643ec2ec9db9b74e068726a",
-      "e66f4db8db012c52b8e34ba3c07ef7ce74680a82b9a9a94b0f43b92ffd93a2ae",
-      "4f9fef5c06a28d8809cbd420a87e584f83ea958498fcfae40b3dc1883a78110a"
-    ],
-    "Guildrun_Data/StreamingAssets/aa/StandaloneWindows64/localization-string-tables-chinese(simplified)(zh-hans)_assets_all.bundle": [
-      "6b09de0d1ef163ca759194278195354df09fdb18422f7cdd6cc04371bcabe7e0",
-      "4d8cb0b1745085cb8dedc506b229ea45c2c991aa2623cb88a87a7a5b25a1625c",
-      "aa97e496a23274bab1364e143718999acc399968aad6ab302b4f5f2ac956d87e",
-      "e931d0df03ea554dbba54d33f5593be4df5c1b74a7f429e6dda529535ecd00ea",
-      "f93e07ea1aef74ac22b489b61686f122164efc7de3a50742f0005dd68c256f5e"
-    ]
+    "windows": {
+      "Guildrun_Data/resources.assets": [
+        "34ebd49ff66030f6c5a95d266383f8e605179347d0f7da9c0a3c4e435ac70346",
+        "4aa5a60d8dff860aec042c9b646aeb4eb8662c70fe1737621b3d9dc49ff89bad",
+        "19e09b9a3d8e6715a064abc80cf66e20e4ab867e4862aadbc7f7fbd52c5d3f9f",
+        "ecfc017d34f24336b6c56f32b7dd0a9f571ae0b157ae2304ce37362a240136cf",
+        "98ef49015502b820512ee66fb82dafa5caab7dfc3aeacab1ee8723add1aa6128"
+      ],
+      "Guildrun_Data/il2cpp_data/Metadata/global-metadata.dat": [
+        "a25e9704977ada34db8508ebd6b57e5ca1ac293b4e28df452d0f7d70dafec1b8",
+        "3aff1f4877ebe9f8ce5f7b280a0e40a8d0fbc257ee01d1732f2d4315980ebc2e",
+        "b7cde19533732c84c00a378c8ce4b03f80a7faea5969d6c3e53277f933f91a5c",
+        "d711a4d87ad0f7751cf692dce9e9bf5e5ac656be1668013ca13c80397beb4fb6"
+      ],
+      "Guildrun_Data/StreamingAssets/aa/catalog.bin": [
+        "3140df6dca7220685e0120130dba34c6f398fda0e0d25c5439a74fb7b19f914f",
+        "80a47c9f8dc2cb85f7dad8a25e48a9a9cc25397d3616cfb6f206398cd6c0762a",
+        "c5b4016b54c1c95f9b2dc7fa9910ef345dd87d5a5643ec2ec9db9b74e068726a",
+        "e66f4db8db012c52b8e34ba3c07ef7ce74680a82b9a9a94b0f43b92ffd93a2ae",
+        "4f9fef5c06a28d8809cbd420a87e584f83ea958498fcfae40b3dc1883a78110a"
+      ],
+      "Guildrun_Data/StreamingAssets/aa/StandaloneWindows64/localization-string-tables-chinese(simplified)(zh-hans)_assets_all.bundle": [
+        "6b09de0d1ef163ca759194278195354df09fdb18422f7cdd6cc04371bcabe7e0",
+        "4d8cb0b1745085cb8dedc506b229ea45c2c991aa2623cb88a87a7a5b25a1625c",
+        "aa97e496a23274bab1364e143718999acc399968aad6ab302b4f5f2ac956d87e",
+        "e931d0df03ea554dbba54d33f5593be4df5c1b74a7f429e6dda529535ecd00ea",
+        "f93e07ea1aef74ac22b489b61686f122164efc7de3a50742f0005dd68c256f5e"
+      ]
+    },
+    "macos": {
+      "Guildrun.app/Contents/Resources/Data/resources.assets": [
+        "2561509c262e7d5dcbbc5f58c96da55adc41072c7b3e312a6844cfb000dda33a"
+      ],
+      "Guildrun.app/Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat": [
+        "0f812ce65abf0d10828cb36faf91fb57cadebb9ad24ea757ca9974d14e91e38a"
+      ],
+      "Guildrun.app/Contents/Resources/Data/StreamingAssets/aa/catalog.bin": [
+        "f7dc5a30409facc30363408d7b194ee6c4bf2223d2417a8b5bbc705cacef4f89"
+      ],
+      "Guildrun.app/Contents/Resources/Data/StreamingAssets/aa/StandaloneOSX/localization-string-tables-chinese(simplified)(zh-hans)_assets_all.bundle": [
+        "8a34ef28310bd9b117d2eb80b2a3bd82fe071cb365c09efdc90445d22b8508e5"
+      ]
+    }
   }
 }

@@ -9,8 +9,20 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    runs-on: windows-latest
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows
+            artifact: windows
+          - os: macos-latest
+            platform: macos
+            artifact: macos-arm64
+          - os: macos-15-intel
+            platform: macos
+            artifact: macos-x64
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
 
@@ -22,22 +34,37 @@ jobs:
         run: python -m pip install -r requirements-release.txt
 
       - name: Build runtime patch release
-        run: python tool/package_release.py
+        run: python tool/package_release.py --platform ${{ matrix.platform }}
 
       - name: Verify release contents
-        run: python tool/verify_release.py
+        run: python tool/verify_release.py --platform ${{ matrix.platform }}
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: guildrun-korean-${{ matrix.artifact }}
+          path: artifacts/Guildrun-Korean-*.zip
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
 
       - name: Publish GitHub Release
-        shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $version = (Get-Content resource/version.json -Raw | ConvertFrom-Json).release
-          $tag = "v$version"
-          $asset = "artifacts/Guildrun-Korean-$version.zip"
-          gh release view $tag 2>$null
-          if ($LASTEXITCODE -eq 0) {
-            gh release upload $tag $asset --clobber
-          } else {
-            gh release create $tag $asset --title "Guildrun Korean Patch $version" --generate-notes
-          }
+          version=$(python -c "import json; print(json.load(open('resource/version.json'))['release'])")
+          tag="v$version"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" artifacts/*.zip --clobber
+          else
+            gh release create "$tag" artifacts/*.zip --title "Guildrun Korean Patch $version" --generate-notes
+          fi

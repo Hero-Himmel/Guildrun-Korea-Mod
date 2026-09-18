@@ -1,9 +1,9 @@
 """Build and install the Guildrun Korean patch from the user's local game files."""
+
 from __future__ import annotations
 
 import argparse
 import hashlib
-import json
 import os
 import shutil
 import sys
@@ -11,16 +11,17 @@ import tempfile
 import threading
 import time
 import uuid
-from datetime import datetime
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from build_patch import RELATIVE, RELEASE, VERSION, build_patch
-
-
-DEFAULT_GAME_ROOT = Path(r"C:\Program Files (x86)\Steam\steamapps\common\Guildrun Demo")
-APP_ROOT = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent.parent
-SOURCE_FILES = tuple(RELATIVE[key] for key in ("resources", "metadata", "catalog", "target"))
+from build_patch import RELEASE, VERSION, build_patch
+from game_layout import (
+    GameLayout,
+    current_platform,
+    default_game_roots,
+    detect_game_layout,
+)
 
 
 def configure_console() -> None:
@@ -30,7 +31,7 @@ def configure_console() -> None:
     try:
         import ctypes
 
-        kernel32 = ctypes.windll.kernel32
+        kernel32 = getattr(ctypes, "windll").kernel32
         kernel32.SetConsoleOutputCP(65001)
         if sys.stdin.isatty():
             kernel32.SetConsoleCP(65001)
@@ -54,32 +55,33 @@ def safe_path(root: Path, relative: Path | str) -> Path:
     return target
 
 
-def load_source_hashes() -> dict[str, set[str]]:
-    configured = VERSION.get("source_files")
-    expected_paths = {path.as_posix() for path in SOURCE_FILES}
+def load_source_hashes(layout: GameLayout) -> dict[str, set[str]]:
+    source_files = VERSION.get("source_files")
+    configured = (
+        source_files.get(layout.platform) if isinstance(source_files, dict) else None
+    )
+    expected_paths = {path.as_posix() for path in layout.source_files.values()}
     if not isinstance(configured, dict) or set(configured) != expected_paths:
-        raise RuntimeError("version.json의 source_files 구성이 잘못되었습니다")
+        raise RuntimeError(
+            f"version.json의 {layout.platform} source_files 구성이 잘못되었습니다"
+        )
     result: dict[str, set[str]] = {}
     for relative, hashes in configured.items():
-        if not isinstance(hashes, list) or not hashes or not all(isinstance(value, str) for value in hashes):
+        if (
+            not isinstance(hashes, list)
+            or not hashes
+            or not all(isinstance(value, str) for value in hashes)
+        ):
             raise RuntimeError(f"version.json의 해시 목록이 잘못되었습니다: {relative}")
         result[relative] = set(hashes)
     return result
 
 
-def verify_game_root(game_root: Path) -> None:
-    if not game_root.is_dir():
-        raise RuntimeError(f"게임 폴더가 없습니다: {game_root}")
-    if not safe_path(game_root, "Guildrun.exe").is_file():
-        raise RuntimeError("Guildrun.exe가 들어 있는 게임 폴더를 지정하세요")
-
-
-def verify_source_files(game_root: Path) -> dict[str, str]:
-    verify_game_root(game_root)
-    allowed = load_source_hashes()
+def verify_source_files(layout: GameLayout) -> dict[str, str]:
+    allowed = load_source_hashes(layout)
     observed: dict[str, str] = {}
-    for relative in SOURCE_FILES:
-        path = safe_path(game_root, relative)
+    for relative in layout.source_files.values():
+        path = safe_path(layout.install_root, relative)
         if not path.is_file():
             raise RuntimeError(f"필수 게임 파일이 없습니다: {relative.as_posix()}")
         digest = sha256(path)
@@ -92,60 +94,75 @@ def verify_source_files(game_root: Path) -> dict[str, str]:
     return observed
 
 
-def write_state(path: Path, state: dict[str, Any]) -> None:
-    path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+def replace_from_payload(
+    layout: GameLayout,
+    payload_root: Path,
+    before_replace: Callable[[], None] | None = None,
+) -> None:
+    """Replace all patch files, retaining originals only for the active transaction."""
+    relative_files = tuple(layout.source_files.values())
+    for relative in relative_files:
+        if not safe_path(payload_root, relative).is_file():
+            raise RuntimeError(f"생성된 패치 파일이 없습니다: {relative.as_posix()}")
 
+    with tempfile.TemporaryDirectory(prefix="guildrun-korean-rollback-") as rollback:
+        rollback_root = Path(rollback)
+        for relative in relative_files:
+            original = safe_path(layout.install_root, relative)
+            saved = safe_path(rollback_root, relative)
+            saved.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(original, saved)
+        if before_replace is not None:
+            before_replace()
 
-def create_backup(game_root: Path, hashes: dict[str, str]) -> tuple[Path, dict[str, Any]]:
-    backup_root = safe_path(game_root, ".guildrun-ko-backups")
-    backup_root.mkdir(exist_ok=True)
-    backup_dir = backup_root / f"{datetime.now():%Y%m%d-%H%M%S}-{uuid.uuid4().hex}"
-    backup_dir.mkdir()
-    state: dict[str, Any] = {
-        "format": 1,
-        "release": RELEASE,
-        "status": "prepared",
-        "created_at": datetime.now().astimezone().isoformat(timespec="seconds"),
-        "source_hashes": hashes,
-        "files": [path.as_posix() for path in SOURCE_FILES],
-    }
-    for relative in SOURCE_FILES:
-        source = safe_path(game_root, relative)
-        destination = safe_path(backup_dir, relative)
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, destination)
-    write_state(backup_dir / "state.json", state)
-    return backup_dir, state
-
-
-def replace_from_payload(game_root: Path, payload_root: Path, backup_dir: Path, state: dict[str, Any]) -> None:
-    state["status"] = "applying"
-    write_state(backup_dir / "state.json", state)
-    replaced: list[Path] = []
-    try:
-        for relative in SOURCE_FILES:
-            source = safe_path(payload_root, relative)
-            destination = safe_path(game_root, relative)
-            if not source.is_file():
-                raise RuntimeError(f"생성된 패치 파일이 없습니다: {relative.as_posix()}")
-            temporary = destination.with_name(destination.name + f".guildrun-ko-{uuid.uuid4().hex}.tmp")
-            shutil.copy2(source, temporary)
-            os.replace(temporary, destination)
-            replaced.append(relative)
-    except Exception:
-        for relative in replaced:
-            shutil.copy2(safe_path(backup_dir, relative), safe_path(game_root, relative))
-        state["status"] = "failed_restored"
-        write_state(backup_dir / "state.json", state)
-        raise
-    state["status"] = "installed"
-    write_state(backup_dir / "state.json", state)
+        replaced: list[Path] = []
+        pending: list[Path] = []
+        try:
+            for relative in relative_files:
+                source = safe_path(payload_root, relative)
+                destination = safe_path(layout.install_root, relative)
+                temporary = destination.with_name(
+                    destination.name + f".guildrun-ko-{uuid.uuid4().hex}.tmp"
+                )
+                pending.append(temporary)
+                shutil.copy2(source, temporary)
+                os.replace(temporary, destination)
+                pending.remove(temporary)
+                replaced.append(relative)
+        except Exception as install_error:
+            restore_errors: list[str] = []
+            for relative in reversed(replaced):
+                destination = safe_path(layout.install_root, relative)
+                temporary = destination.with_name(
+                    destination.name + f".guildrun-ko-restore-{uuid.uuid4().hex}.tmp"
+                )
+                try:
+                    shutil.copy2(safe_path(rollback_root, relative), temporary)
+                    os.replace(temporary, destination)
+                except Exception as restore_error:
+                    restore_errors.append(f"{relative.as_posix()}: {restore_error}")
+                finally:
+                    temporary.unlink(missing_ok=True)
+            if restore_errors:
+                details = "; ".join(restore_errors)
+                raise RuntimeError(
+                    f"설치 실패 후 자동 롤백도 완료하지 못했습니다: {details}. "
+                    "Steam에서 게임 파일 무결성 검사를 실행하세요"
+                ) from install_error
+            raise
+        finally:
+            for temporary in pending:
+                temporary.unlink(missing_ok=True)
 
 
 def format_duration(seconds: int) -> str:
     hours, remaining = divmod(seconds, 3600)
     minutes, seconds = divmod(remaining, 60)
-    return f"{hours:02d}:{minutes:02d}:{seconds:02d}" if hours else f"{minutes:02d}:{seconds:02d}"
+    return (
+        f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+        if hours
+        else f"{minutes:02d}:{seconds:02d}"
+    )
 
 
 class ProgressTimer:
@@ -162,7 +179,11 @@ class ProgressTimer:
         return int(time.monotonic() - self.started_at)
 
     def _render(self) -> None:
-        print(f"\r진행 시간: {format_duration(self.elapsed_seconds())}", end="", flush=True)
+        print(
+            f"\r진행 시간: {format_duration(self.elapsed_seconds())}",
+            end="",
+            flush=True,
+        )
 
     def _clear_line(self) -> None:
         print("\r" + " " * 32 + "\r", end="", flush=True)
@@ -180,7 +201,9 @@ class ProgressTimer:
             self._last_second = self.elapsed_seconds()
             self._render()
         if sys.stdout.isatty():
-            self._thread = threading.Thread(target=self._tick, name="progress-timer", daemon=True)
+            self._thread = threading.Thread(
+                target=self._tick, name="progress-timer", daemon=True
+            )
             self._thread.start()
 
     def stage(self, message: str) -> None:
@@ -200,63 +223,57 @@ class ProgressTimer:
         return elapsed
 
 
-def install(game_root: Path, hashes: dict[str, str], progress: ProgressTimer) -> None:
+def install(layout: GameLayout, progress: ProgressTimer) -> None:
     progress.stage("[2/4] 한글 문장과 폰트로 패치 파일을 생성하는 중... (약 1분 소요)")
     with tempfile.TemporaryDirectory(prefix="guildrun-korean-") as temporary_root:
         payload_root = Path(temporary_root) / "payload"
-        build_patch(game_root=game_root, output=payload_root)
-        progress.stage("[3/4] 원본 게임 파일을 백업하는 중...")
-        backup_dir, state = create_backup(game_root, hashes)
-        progress.stage("[4/4] 한글 패치 파일을 게임 폴더에 적용하는 중...")
-        replace_from_payload(game_root, payload_root, backup_dir, state)
+        build_patch(
+            game_root=layout.install_root,
+            output=payload_root,
+            platform=layout.platform,
+        )
+        progress.stage("[3/4] 설치 중 자동 롤백용 원본을 임시 보관하는 중...")
+        replace_from_payload(
+            layout,
+            payload_root,
+            before_replace=lambda: progress.stage(
+                "[4/4] 한글 패치 파일을 게임 폴더에 적용하는 중..."
+            ),
+        )
 
 
-def restore(game_root: Path) -> None:
-    verify_game_root(game_root)
-    backup_root = safe_path(game_root, ".guildrun-ko-backups")
-    candidates = sorted((path for path in backup_root.glob("*") if path.is_dir()), reverse=True) if backup_root.is_dir() else []
-    for backup_dir in candidates:
-        state_path = backup_dir / "state.json"
-        if not state_path.is_file():
-            continue
-        state = json.loads(state_path.read_text(encoding="utf-8"))
-        if state.get("status") not in {"installed", "failed_restored"}:
-            continue
-        for relative in SOURCE_FILES:
-            source = safe_path(backup_dir, relative)
-            if not source.is_file():
-                raise RuntimeError(f"백업 파일이 없습니다: {relative.as_posix()}")
-            destination = safe_path(game_root, relative)
-            temporary = destination.with_name(destination.name + f".guildrun-ko-{uuid.uuid4().hex}.tmp")
-            shutil.copy2(source, temporary)
-            os.replace(temporary, destination)
-        state["status"] = "restored"
-        write_state(state_path, state)
-        return
-    raise RuntimeError("복원할 한글 패치 백업이 없습니다")
-
-
-def choose_game_root(given: str | None) -> Path:
+def choose_game_layout(given: str | None) -> GameLayout:
+    platform = current_platform()
     if given:
-        game_root = Path(given).expanduser().resolve()
+        layout = detect_game_layout(Path(given), platform)
         print("게임 경로 확인 완료.")
-        return game_root
-    if DEFAULT_GAME_ROOT.is_dir() and (DEFAULT_GAME_ROOT / "Guildrun.exe").is_file():
+        return layout
+    for default_root in default_game_roots(platform):
+        try:
+            layout = detect_game_layout(default_root, platform)
+        except RuntimeError:
+            continue
         print("기본 게임 경로 확인 완료.")
-        return DEFAULT_GAME_ROOT
+        return layout
     print("기본 게임 경로를 찾지 못했습니다.")
     while True:
-        answer = input("Guildrun Demo 게임 경로를 입력하세요: ").strip().strip('"')
+        answer = (
+            input("Guildrun Demo 설치 폴더 또는 Guildrun.app 경로를 입력하세요: ")
+            .strip()
+            .strip('"')
+        )
         if not answer:
             raise RuntimeError("게임 경로를 입력하지 않아 종료합니다")
-        game_root = Path(answer).expanduser().resolve()
-        if game_root.is_dir() and (game_root / "Guildrun.exe").is_file():
+        try:
+            layout = detect_game_layout(Path(answer), platform)
+        except RuntimeError:
+            print("Guildrun 게임 실행 파일이 있는 올바른 경로를 입력하세요.")
+        else:
             print("게임 경로 확인 완료.")
-            return game_root
-        print("Guildrun.exe가 있는 올바른 게임 폴더를 입력하세요.")
+            return layout
 
 
-def set_warning_color() -> tuple[object, int] | None:
+def set_warning_color() -> tuple[Any, int] | None:
     """Set bright-green text in a Windows console and retain its original color."""
     if os.name != "nt":
         return None
@@ -283,10 +300,12 @@ def set_warning_color() -> tuple[object, int] | None:
                 ("maximum_window_size", Coord),
             ]
 
-        kernel32 = ctypes.windll.kernel32
+        kernel32 = getattr(ctypes, "windll").kernel32
         handle = kernel32.GetStdHandle(-11)  # STD_OUTPUT_HANDLE
         info = ConsoleScreenBufferInfo()
-        if handle in (0, -1) or not kernel32.GetConsoleScreenBufferInfo(handle, ctypes.byref(info)):
+        if handle in (0, -1) or not kernel32.GetConsoleScreenBufferInfo(
+            handle, ctypes.byref(info)
+        ):
             return None
         original = int(info.attributes)
         bright_green = (original & 0xFFF0) | 0x000A
@@ -296,7 +315,7 @@ def set_warning_color() -> tuple[object, int] | None:
         return None
 
 
-def restore_console_color(state: tuple[object, int] | None) -> None:
+def restore_console_color(state: tuple[Any, int] | None) -> None:
     if state is not None:
         kernel32, original = state
         kernel32.SetConsoleTextAttribute(kernel32.GetStdHandle(-11), original)
@@ -312,7 +331,7 @@ def read_confirmation() -> str:
 
         while True:
             print("계속하시겠습니까?  1. Yes  2. No : ", end="", flush=True)
-            answer = msvcrt.getwch()
+            answer = getattr(msvcrt, "getwch")()
             if answer in {"1", "2"}:
                 print(answer)
                 return answer
@@ -329,9 +348,12 @@ def confirm_install() -> bool:
     try:
         print(
             "\n[주의 사항]\n"
-            "이 MOD는 비공식 한글 패치입니다. 사용에 따른 책임은 사용자 본인에게 있습니다.\n"
-            "게임 파일은 백업한 뒤 교체되며, 게임 업데이트 후에는 호환성 확인이 필요합니다.\n"
-            "번역은 AI를 활용했으며, 번역 데이터를 다른 MOD에 포함해 재배포하지 마세요.\n"
+            "이 MOD는 비공식 한글 패치입니다. "
+            "사용에 따른 책임은 사용자 본인에게 있습니다.\n"
+            "설치 중에만 원본 파일을 임시 보관하며, 실패하면 자동으로 되돌립니다.\n"
+            "패치 제거 또는 게임 업데이트 후 복구에는 Steam 무결성 검사를 사용하세요.\n"
+            "번역은 AI를 활용했으며, 번역 데이터를 다른 MOD에 포함해 "
+            "재배포하지 마세요.\n"
         )
         if read_confirmation() == "1":
             return True
@@ -345,7 +367,7 @@ def main() -> int:
     configure_console()
     parser = argparse.ArgumentParser(description="Guildrun Korean runtime patcher")
     parser.add_argument("--game-path")
-    parser.add_argument("--action", choices=("install", "check", "restore"), default="install")
+    parser.add_argument("--action", choices=("install", "check"), default="install")
     parser.add_argument("--no-pause", action="store_true")
     args = parser.parse_args()
     try:
@@ -353,22 +375,18 @@ def main() -> int:
             return 0
         if args.action == "install":
             clear_screen()
-        game_root = choose_game_root(args.game_path)
+        layout = choose_game_layout(args.game_path)
         print(f"Guildrun 한국어 패치 {RELEASE}")
-        if args.action == "restore":
-            print("원본 게임 파일을 복원하는 중...")
-            restore(game_root)
-            print("한글 패치 복원 완료.")
-        elif args.action == "check":
-            verify_source_files(game_root)
+        if args.action == "check":
+            verify_source_files(layout)
             print("[1/1] 호환성 테스트 완료.")
         else:
             progress = ProgressTimer()
             progress.start()
             try:
-                hashes = verify_source_files(game_root)
+                verify_source_files(layout)
                 progress.stage("[1/4] 호환성 테스트 완료.")
-                install(game_root, hashes, progress)
+                install(layout, progress)
             finally:
                 elapsed = progress.stop()
             print(f"Done. 한글 패치 완료. (총 소요 시간: {format_duration(elapsed)})")
