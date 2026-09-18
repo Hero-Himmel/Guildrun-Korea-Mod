@@ -4,7 +4,7 @@ Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 �
 
 ## 설치 방법
 
-GitHub Release에서 운영체제에 맞는 파일을 내려받아 압축을 풉니다.
+Windows는 GitHub Release 파일을 사용하고, macOS는 아래 터미널 설치 명령을 사용합니다.
 
 ### Windows
 
@@ -19,18 +19,35 @@ GitHub Release에서 운영체제에 맞는 파일을 내려받아 압축을 풉
 
 ### macOS
 
-1. Apple Silicon Mac은 `Guildrun-Korean-<버전>-macos-arm64.zip`, Intel Mac은
-   `Guildrun-Korean-<버전>-macos-x64.zip`을 내려받습니다.
-2. 압축을 풀고 `GuildrunKoreanPatcher.command`를 실행합니다.
-3. 일반적인 Steam 설치 환경에서는 아래 게임 경로를 자동으로 찾습니다.
+터미널을 열고 아래 명령을 붙여 넣어 실행합니다.
 
-   ```text
-   ~/Library/Application Support/Steam/steamapps/common/Guildrun Demo
-   ```
+```bash
+/bin/zsh -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Hero-Himmel/Guildrun-Korea-Mod/main/install-macos.sh)"
+```
 
-4. macOS가 실행을 차단하면 Finder에서 `.command` 파일을 Control-클릭한 뒤 `열기`를 선택하거나,
-   시스템 설정의 `개인정보 보호 및 보안`에서 실행을 허용합니다.
-5. 다른 Steam 라이브러리에 설치했다면 `Guildrun Demo` 폴더 또는 `Guildrun.app` 경로를 입력합니다.
+설치 스크립트는 최신 릴리즈와 Mac 아키텍처를 확인하고, 맞는 패처와 SHA-256 체크섬을 내려받아
+검증한 뒤 임시 폴더에서 실행합니다. `sudo`를 요구하거나 Gatekeeper 설정을 변경하지 않으며,
+패처가 종료되면 다운로드한 임시 파일을 삭제합니다.
+
+일반적인 Steam 설치 환경에서는 아래 게임 경로를 자동으로 찾습니다.
+
+```text
+~/Library/Application Support/Steam/steamapps/common/Guildrun Demo
+```
+
+다른 Steam 라이브러리에 설치했다면 패처가 묻는 입력란에 `Guildrun Demo` 폴더 또는
+`Guildrun.app` 경로를 입력합니다.
+
+원격 스크립트를 먼저 확인하려면 다음 순서로 실행할 수 있습니다.
+
+```bash
+/usr/bin/curl -fsSLO https://raw.githubusercontent.com/Hero-Himmel/Guildrun-Korea-Mod/main/install-macos.sh
+/usr/bin/less install-macos.sh
+/bin/zsh install-macos.sh
+```
+
+GitHub Release의 아키텍처별 macOS ZIP을 직접 내려받는 방법도 제공하지만, 브라우저로 받은
+서명되지 않은 실행 파일은 Gatekeeper가 차단할 수 있으므로 위 설치 명령을 권장합니다.
 
 ## 패치 제거 및 복구
 
@@ -49,6 +66,7 @@ GitHub Release에서 운영체제에 맞는 파일을 내려받아 압축을 풉
 - `tool/runtime_patcher.py` — 해시 검사·임시 생성·트랜잭션 교체·실패 시 롤백 담당
 - `tool/package_release.py` — 원본 게임 파일 없이 운영체제별 실행 파일·ZIP 생성
 - `tool/verify_release.py` — 생성된 Release에 원본 게임 파일이 없는지와 무결성 검사
+- `install-macos.sh` — 최신 macOS 패처를 검증·임시 실행하는 설치 스크립트
 - `resource/fonts/` — Noto Sans KR 7종과 `font-config.json`
 - `resource/icons/GuildrunKoreanPatcher.ico` — 한국어 패처 EXE 아이콘
 - `resource/guildrun-korean-source.json` — 버전·번역문·Unity 메타데이터를 포함한 원본
