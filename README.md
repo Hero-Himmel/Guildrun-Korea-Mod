@@ -1,5 +1,8 @@
 # Guildrun 한국어 MOD
 
+> [!WARNING]
+> **macOS 미지원:** Guildrun Demo 0.5.10버전 한글 패치는 Windows만 지원합니다.
+
 Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 패치입니다.
 
 ## 설치 방법
