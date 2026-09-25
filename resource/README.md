@@ -29,3 +29,20 @@ source_files.windows, source_files.macos
 
 번역 추가, 폰트 교체, 해시 추가, `release` 변경에는 `format` 값을 올리지 않습니다.
 패처가 읽는 필드 구조나 의미를 호환되지 않게 바꿀 때만 다음 번호로 올립니다.
+
+## macOS 원본 체크섬 수집
+
+체크섬은 운영체제가 아니라 파일 바이트로 계산하므로, 깨끗한 macOS Steam 설치에서 원본 파일을
+읽어 SHA-256을 계산하면 됩니다. 패치된 게임이나 Steam 무결성 검사를 하지 않은 설치는 사용하지 마세요.
+
+```bash
+GAME="$HOME/Library/Application Support/Steam/steamapps/common/Guildrun Demo"
+shasum -a 256 \
+  "$GAME/Guildrun.app/Contents/Resources/Data/resources.assets" \
+  "$GAME/Guildrun.app/Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat" \
+  "$GAME/Guildrun.app/Contents/Resources/Data/StreamingAssets/aa/catalog.bin" \
+  "$GAME/Guildrun.app/Contents/Resources/Data/StreamingAssets/aa/StandaloneOSX/localization-string-tables-chinese(simplified)(zh-hans)_assets_all.bundle"
+```
+
+Mac을 사용할 수 없다면 SteamCMD에서 macOS 플랫폼을 지정해 macOS depot 원본을 내려받은 뒤 동일하게
+SHA-256을 계산할 수 있습니다. Windows용 대응 파일의 체크섬을 macOS 경로에 복사해서는 안 됩니다.

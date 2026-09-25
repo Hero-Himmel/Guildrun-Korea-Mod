@@ -1,13 +1,13 @@
 {
   "format": 1,
   "game": "Guildrun Demo",
-  "game_version": "0.5.9",
-  "target_build": "25323618",
+  "game_version": "0.5.10",
+  "target_build": "25461680",
   "locale": {
     "code": "zh-Hans",
     "display_name": "한국어（MOD）"
   },
-  "entry_count": 3923,
+  "entry_count": 3927,
   "entries": [
     {
       "id": "746866737152",
@@ -44379,6 +44379,42 @@
           }
         ]
       }
+    },
+    {
+      "id": "72664681167183872",
+      "table": "",
+      "key": "",
+      "shared_table_id": "-7050304977557868293",
+      "english": "Rank ",
+      "korean": "순위 ",
+      "source": "manual_current"
+    },
+    {
+      "id": "72709119801286656",
+      "table": "",
+      "key": "",
+      "shared_table_id": "-7050304977557868293",
+      "english": "Rank ",
+      "korean": "순위 ",
+      "source": "manual_current"
+    },
+    {
+      "id": "77753393701969920",
+      "table": "",
+      "key": "",
+      "shared_table_id": "-7050304977557868293",
+      "english": "Hero Locked",
+      "korean": "히어로 미해금",
+      "source": "manual_current"
+    },
+    {
+      "id": "77753393743912960",
+      "table": "",
+      "key": "",
+      "shared_table_id": "-7050304977557868293",
+      "english": "Unlock via progression",
+      "korean": "게임 진행에 따라 해금됩니다",
+      "source": "manual_current"
     },
     {
       "id": "95887992982994944",
