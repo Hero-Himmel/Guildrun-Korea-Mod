@@ -1,8 +1,8 @@
 {
   "format": 1,
   "game": "Guildrun Demo",
-  "game_version": "0.5.10",
-  "target_build": "25461680",
+  "game_version": "0.5.11",
+  "target_build": "25604606",
   "locale": {
     "code": "zh-Hans",
     "display_name": "한국어（MOD）"
