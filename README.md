@@ -1,13 +1,10 @@
 # Guildrun 한국어 MOD
 
-> [!WARNING]
-> **macOS 미지원:** Guildrun Demo 0.5.11 버전 한글 패치는 Windows만 지원합니다. 대응하는 macOS 게임 빌드를 검증한 뒤 별도로 지원할 예정입니다.
-
 Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 패치입니다.
 
 ## 설치 방법
 
-GitHub Release의 Windows ZIP 파일을 사용합니다.
+Windows는 GitHub Release 파일을 사용하고, macOS는 아래 터미널 설치 명령을 사용합니다.
 
 ### Windows
 
@@ -19,6 +16,38 @@ GitHub Release의 Windows ZIP 파일을 사용합니다.
    ```
 
 3. 다른 Steam 라이브러리에 설치했다면 패처가 묻는 입력란에 `Guildrun.exe`가 있는 게임 폴더를 입력합니다.
+
+### macOS
+
+터미널을 열고 아래 명령을 붙여 넣어 실행합니다.
+
+```bash
+/bin/zsh -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Hero-Himmel/Guildrun-Korea-Mod/main/install-macos.sh)"
+```
+
+설치 스크립트는 최신 릴리즈와 Mac 아키텍처를 확인하고, 맞는 패처와 SHA-256 체크섬을 내려받아
+검증한 뒤 임시 폴더에서 실행합니다. `sudo`를 요구하거나 Gatekeeper 설정을 변경하지 않으며,
+패처가 종료되면 다운로드한 임시 파일을 삭제합니다.
+
+일반적인 Steam 설치 환경에서는 아래 게임 경로를 자동으로 찾습니다.
+
+```text
+~/Library/Application Support/Steam/steamapps/common/Guildrun Demo
+```
+
+다른 Steam 라이브러리에 설치했다면 패처가 묻는 입력란에 `Guildrun Demo` 폴더 또는
+`Guildrun.app` 경로를 입력합니다.
+
+원격 스크립트를 먼저 확인하려면 다음 순서로 실행할 수 있습니다.
+
+```bash
+/usr/bin/curl -fsSLO https://raw.githubusercontent.com/Hero-Himmel/Guildrun-Korea-Mod/main/install-macos.sh
+/usr/bin/less install-macos.sh
+/bin/zsh install-macos.sh
+```
+
+GitHub Release의 아키텍처별 macOS ZIP을 직접 내려받는 방법도 제공하지만, 브라우저로 받은
+서명되지 않은 실행 파일은 Gatekeeper가 차단할 수 있으므로 위 설치 명령을 권장합니다.
 
 ## 패치 제거 및 복구
 
