@@ -1,13 +1,13 @@
 {
   "format": 2,
   "game": "Guildrun Demo",
-  "game_version": "0.5.11",
-  "target_build": "25604606",
-  "release": "0.5.11-a",
+  "game_version": "0.5.12",
+  "target_build": "25751498",
+  "release": "0.5.12-a",
   "source_files": {
     "windows": {
       "Guildrun_Data/resources.assets": [
-        "552f46d492fbe9444bf00fa165848a2efd7d05d693df037bfca56acca9d7c315"
+        "67666ebae207455967c174552064073ee6aa2959db475d4fc38617ea12de86d8"
       ],
       "Guildrun_Data/il2cpp_data/Metadata/global-metadata.dat": [
         "0a8a3fa8ce9d1c2a3258bad7f0e3a5ab724c239f7c4c9f534dde5a83b8843923"
@@ -21,7 +21,7 @@
     },
     "macos": {
       "Guildrun.app/Contents/Resources/Data/resources.assets": [
-        "8b895c9fbadc16cf8e0dc71b257be9f984e29d20c071b9038f20fd0c28f5cb3a"
+        "a8c4f2bcce0a85605a269237f9108bf8337abea4fca687b3ba4365c659960272"
       ],
       "Guildrun.app/Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat": [
         "3d989f6a69447a03b218590bd5b382a1155d792a427352a5c447a62e705580b0"
