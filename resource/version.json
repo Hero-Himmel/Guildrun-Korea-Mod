@@ -1,36 +1,36 @@
 {
   "format": 2,
   "game": "Guildrun Demo",
-  "game_version": "0.5.13",
-  "target_build": "25907365",
-  "release": "0.5.13-a",
+  "game_version": "0.5.14",
+  "target_build": "26081909",
+  "release": "0.5.14-a",
   "source_files": {
     "windows": {
       "Guildrun_Data/resources.assets": [
-        "36158f0d3832c46a927ce945c8b42089f5e6c4479a02feb143e58270eb196886"
+        "03c93d5876c1d9abeeeae751b9f8f71d242c18452ab5d03379ab6e09c11dc2fb"
       ],
       "Guildrun_Data/il2cpp_data/Metadata/global-metadata.dat": [
-        "688ba993f622bb2dfd04f7a4ef99b833713c8f3c0ab499dd54872573495394e6"
+        "e9810490846dacec584691fe1f65e9fdd4ef69676cebaa961c4607bcf3adb821"
       ],
       "Guildrun_Data/StreamingAssets/aa/catalog.bin": [
-        "4f9fef5c06a28d8809cbd420a87e584f83ea958498fcfae40b3dc1883a78110a"
+        "c663845b3235530150657ab818332e45ffcaf99e333677b393a62afee28f14e4"
       ],
       "Guildrun_Data/StreamingAssets/aa/StandaloneWindows64/localization-string-tables-chinese(simplified)(zh-hans)_assets_all.bundle": [
-        "f93e07ea1aef74ac22b489b61686f122164efc7de3a50742f0005dd68c256f5e"
+        "24ecb2eb4a72e8064c08241066fb3ade12fc63bf8398957363f0381b1aa8ef4a"
       ]
     },
     "macos": {
       "Guildrun.app/Contents/Resources/Data/resources.assets": [
-        "0670691dcf88263c79e71eca21fe474e4f96ad9e5ff130ee3210bb9b72ba3959"
+        "d005e193adb935e8f04a8c9571aa12c23b8b11d0d294a84a51fbf4ed27b45100"
       ],
       "Guildrun.app/Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat": [
-        "82eba84365bfe615f55d8187a074a9c560d4609f686b69735e7972a856eff727"
+        "99497f8754efdac8a42944e48e178d101e461addd93b0b3e6d34a610e2f56d5c"
       ],
       "Guildrun.app/Contents/Resources/Data/StreamingAssets/aa/catalog.bin": [
-        "f7dc5a30409facc30363408d7b194ee6c4bf2223d2417a8b5bbc705cacef4f89"
+        "d3aedb54670d3687e4c269acaa13745dd360bdf857bf8fd9146113a362aa9720"
       ],
       "Guildrun.app/Contents/Resources/Data/StreamingAssets/aa/StandaloneOSX/localization-string-tables-chinese(simplified)(zh-hans)_assets_all.bundle": [
-        "8a34ef28310bd9b117d2eb80b2a3bd82fe071cb365c09efdc90445d22b8508e5"
+        "f3dba5b234995ff2e9508a1b037df18a11450ffdd79b854f8896bf9a93130c9c"
       ]
     }
   }

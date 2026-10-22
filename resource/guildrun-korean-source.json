@@ -1,8 +1,8 @@
 {
   "format": 1,
   "game": "Guildrun Demo",
-  "game_version": "0.5.13",
-  "target_build": "25907365",
+  "game_version": "0.5.14",
+  "target_build": "26081909",
   "locale": {
     "code": "zh-Hans",
     "display_name": "한국어（MOD）"
@@ -44360,8 +44360,8 @@
       "table": "UI",
       "key": "UI.Leaderboard.ResetTooltipDescription",
       "shared_table_id": "-7050304977557868293",
-      "english": "Leaderboards reset on a regular basis. Make sure you're in the most updated version of game to get on the new leaderboard.",
-      "korean": "랭킹은 정기적으로 초기화됩니다. 새로운 랭킹에 참여하려면 게임을 최신 버전으로 업데이트해 주세요.",
+      "english": "Leaderboards reset on a regular basis.",
+      "korean": "랭킹은 정기적으로 초기화됩니다.",
       "source": "legacy_patch"
     },
     {
