@@ -16,6 +16,12 @@ jobs:
           - os: windows-latest
             platform: windows
             artifact: windows
+          - os: macos-latest
+            platform: macos
+            artifact: macos-arm64
+          - os: macos-15-intel
+            platform: macos
+            artifact: macos-x64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4

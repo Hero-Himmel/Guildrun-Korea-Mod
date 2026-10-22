@@ -21,16 +21,16 @@
     },
     "macos": {
       "Guildrun.app/Contents/Resources/Data/resources.assets": [
-        "0670691dcf88263c79e71eca21fe474e4f96ad9e5ff130ee3210bb9b72ba3959"
+        "d005e193adb935e8f04a8c9571aa12c23b8b11d0d294a84a51fbf4ed27b45100"
       ],
       "Guildrun.app/Contents/Resources/Data/il2cpp_data/Metadata/global-metadata.dat": [
-        "82eba84365bfe615f55d8187a074a9c560d4609f686b69735e7972a856eff727"
+        "99497f8754efdac8a42944e48e178d101e461addd93b0b3e6d34a610e2f56d5c"
       ],
       "Guildrun.app/Contents/Resources/Data/StreamingAssets/aa/catalog.bin": [
-        "f7dc5a30409facc30363408d7b194ee6c4bf2223d2417a8b5bbc705cacef4f89"
+        "d3aedb54670d3687e4c269acaa13745dd360bdf857bf8fd9146113a362aa9720"
       ],
       "Guildrun.app/Contents/Resources/Data/StreamingAssets/aa/StandaloneOSX/localization-string-tables-chinese(simplified)(zh-hans)_assets_all.bundle": [
-        "8a34ef28310bd9b117d2eb80b2a3bd82fe071cb365c09efdc90445d22b8508e5"
+        "f3dba5b234995ff2e9508a1b037df18a11450ffdd79b854f8896bf9a93130c9c"
       ]
     }
   }
