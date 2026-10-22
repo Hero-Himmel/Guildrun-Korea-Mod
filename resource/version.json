@@ -1,22 +1,22 @@
 {
   "format": 2,
   "game": "Guildrun Demo",
-  "game_version": "0.5.13",
-  "target_build": "25907365",
-  "release": "0.5.13-a",
+  "game_version": "0.5.14",
+  "target_build": "26081909",
+  "release": "0.5.14-a",
   "source_files": {
     "windows": {
       "Guildrun_Data/resources.assets": [
-        "36158f0d3832c46a927ce945c8b42089f5e6c4479a02feb143e58270eb196886"
+        "03c93d5876c1d9abeeeae751b9f8f71d242c18452ab5d03379ab6e09c11dc2fb"
       ],
       "Guildrun_Data/il2cpp_data/Metadata/global-metadata.dat": [
-        "688ba993f622bb2dfd04f7a4ef99b833713c8f3c0ab499dd54872573495394e6"
+        "e9810490846dacec584691fe1f65e9fdd4ef69676cebaa961c4607bcf3adb821"
       ],
       "Guildrun_Data/StreamingAssets/aa/catalog.bin": [
-        "4f9fef5c06a28d8809cbd420a87e584f83ea958498fcfae40b3dc1883a78110a"
+        "c663845b3235530150657ab818332e45ffcaf99e333677b393a62afee28f14e4"
       ],
       "Guildrun_Data/StreamingAssets/aa/StandaloneWindows64/localization-string-tables-chinese(simplified)(zh-hans)_assets_all.bundle": [
-        "f93e07ea1aef74ac22b489b61686f122164efc7de3a50742f0005dd68c256f5e"
+        "24ecb2eb4a72e8064c08241066fb3ade12fc63bf8398957363f0381b1aa8ef4a"
       ]
     },
     "macos": {

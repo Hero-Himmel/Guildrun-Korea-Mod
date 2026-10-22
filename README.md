@@ -1,12 +1,15 @@
 # Guildrun 한국어 MOD
 
-Guildrun Demo **0.5.13**의 Windows와 macOS를 지원합니다.
+Guildrun Demo **0.5.14**의 Windows를 지원합니다.
+
+> [!WARNING]
+> **macOS 미지원:** 이번 0.5.14 패치는 Windows 전용이며, macOS용 패치를 제공하지 않습니다.
 
 Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 패치입니다.
 
 ## 설치 방법
 
-Windows는 GitHub Release 파일을 사용하고, macOS는 아래 터미널 설치 명령을 사용합니다.
+Windows는 GitHub Release 파일을 사용합니다. 아래 macOS 설치 안내는 macOS를 지원하는 이전 릴리스에만 해당합니다.
 
 ### Windows
 
