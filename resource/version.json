@@ -2,15 +2,15 @@
   "format": 2,
   "game": "Guildrun Demo",
   "game_version": "0.5.14",
-  "target_build": "26081909",
+  "target_build": "26438775",
   "release": "0.5.14-a",
   "source_files": {
     "windows": {
       "Guildrun_Data/resources.assets": [
-        "03c93d5876c1d9abeeeae751b9f8f71d242c18452ab5d03379ab6e09c11dc2fb"
+        "adff543e2324dc47f4631d289cf30409ad022e8c173a20fbc7e7c5e4983a2b80"
       ],
       "Guildrun_Data/il2cpp_data/Metadata/global-metadata.dat": [
-        "e9810490846dacec584691fe1f65e9fdd4ef69676cebaa961c4607bcf3adb821"
+        "1d25f1ffe867286f505d511c1b2b0dcc59e1e118b463707294fb6cb13370438c"
       ],
       "Guildrun_Data/StreamingAssets/aa/catalog.bin": [
         "c663845b3235530150657ab818332e45ffcaf99e333677b393a62afee28f14e4"
