@@ -10,7 +10,7 @@ Windows는 GitHub Release 파일을 사용하고, macOS는 아래 터미널 설�
 
 ### Windows
 
-1. `Guildrun-Korean-<버전>-windows.zip` 안의 `GuildrunKoreanPatcher.exe`를 실행합니다.
+1. `Guildrun-Korean-<버전>-windows.zip`의 모든 파일을 한 폴더에 압축 해제한 뒤 `GuildrunKoreanPatcher.exe`를 실행합니다. 함께 들어 있는 `_internal` 폴더도 필요하므로 EXE만 따로 옮기지 마세요.
 2. 일반적인 Steam 설치 환경에서는 아래 게임 경로를 자동으로 찾습니다.
 
    ```text
