@@ -3,7 +3,7 @@
   "game": "Guildrun Demo",
   "game_version": "0.5.14",
   "target_build": "26438775",
-  "release": "0.5.14-b",
+  "release": "0.5.14-c",
   "source_files": {
     "windows": {
       "Guildrun_Data/resources.assets": [
