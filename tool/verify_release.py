@@ -41,9 +41,42 @@ def main() -> None:
         else {"GuildrunKoreanPatcher", "GuildrunKoreanPatcher.command"}
     )
     files = sorted(path for path in release.rglob("*") if path.is_file())
-    if {path.name for path in files} != expected_names or len(files) != len(
-        expected_names
-    ):
+    relative_names = {path.relative_to(release).as_posix() for path in files}
+    if args.platform == PLATFORM_WINDOWS:
+        if (
+            {path.name for path in release.iterdir()}
+            != {"GuildrunKoreanPatcher.exe", "_internal"}
+            or not (release / "GuildrunKoreanPatcher.exe").is_file()
+            or not (release / "_internal").is_dir()
+        ):
+            raise RuntimeError(
+                "Windows release must contain the EXE and _internal directory"
+            )
+        resource_root = release / "_internal" / "resource"
+        expected_resources = {
+            path.relative_to(RESOURCE_ROOT).as_posix(): path
+            for path in RESOURCE_ROOT.rglob("*")
+            if path.is_file()
+        }
+        actual_resources = {
+            path.relative_to(resource_root).as_posix(): path
+            for path in resource_root.rglob("*")
+            if path.is_file()
+        }
+        if actual_resources.keys() != expected_resources.keys():
+            raise RuntimeError("Bundled patch resources are missing or unexpected")
+        for name, path in actual_resources.items():
+            if path.read_bytes() != expected_resources[name].read_bytes():
+                raise RuntimeError(f"Bundled resource mismatch: {name}")
+        if not list((release / "_internal").glob("python3*.dll")):
+            raise RuntimeError("Bundled Python runtime is missing")
+        for path in files:
+            if path.suffix.lower() in {".bundle", ".assets", ".ress"} or path.name.lower() in {
+                "guildrun.exe", "globalgamemanagers", "global-metadata.dat",
+                "catalog.bin", "data.unity3d"
+            }:
+                raise RuntimeError(f"Game data must not be distributed: {path}")
+    elif relative_names != expected_names:
         raise RuntimeError(f"Release directory contents are invalid: {expected_names}")
     if args.platform == PLATFORM_MACOS:
         for path in files:
@@ -57,16 +90,17 @@ def main() -> None:
         if zip_file.testzip() is not None:
             raise RuntimeError("Release ZIP is corrupted")
         names = [item.filename for item in zip_file.infolist() if not item.is_dir()]
-        if set(names) != expected_names or len(names) != len(expected_names):
+        if set(names) != relative_names or len(names) != len(relative_names):
             raise RuntimeError("Release ZIP contents are invalid")
         for path in files:
+            relative = path.relative_to(release).as_posix()
             if args.platform == PLATFORM_MACOS:
                 archived_mode = zip_file.getinfo(path.name).external_attr >> 16
                 if archived_mode & 0o111 == 0:
                     raise RuntimeError(
                         f"macOS ZIP executable permission is missing: {path.name}"
                     )
-            archived = hashlib.sha256(zip_file.read(path.name)).digest()
+            archived = hashlib.sha256(zip_file.read(relative)).digest()
             local = hashlib.sha256(path.read_bytes()).digest()
             if archived != local:
                 raise RuntimeError(f"Release ZIP hash mismatch: {path.name}")

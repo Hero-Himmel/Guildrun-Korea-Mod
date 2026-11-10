@@ -42,7 +42,7 @@ def build_runtime_executable(build_root: Path, platform: str) -> Path:
         "--clean",
         "--log-level",
         "WARN",
-        "--onefile",
+        "--onedir" if platform == PLATFORM_WINDOWS else "--onefile",
         "--console",
         "--name",
         "GuildrunKoreanPatcher",
@@ -72,7 +72,11 @@ def build_runtime_executable(build_root: Path, platform: str) -> Path:
         if platform == PLATFORM_WINDOWS
         else "GuildrunKoreanPatcher"
     )
-    executable = dist / executable_name
+    executable = (
+        dist / "GuildrunKoreanPatcher" / executable_name
+        if platform == PLATFORM_WINDOWS
+        else dist / executable_name
+    )
     if not executable.is_file():
         raise RuntimeError(f"PyInstaller did not create {executable_name}")
     return executable
@@ -111,14 +115,18 @@ def main() -> None:
         prefix="guildrun-release-", dir=output_root
     ) as temporary:
         executable = build_runtime_executable(Path(temporary), args.platform)
-        shutil.copy2(executable, output / executable.name)
+        if args.platform == PLATFORM_WINDOWS:
+            shutil.copytree(executable.parent, output, dirs_exist_ok=True)
+        else:
+            shutil.copy2(executable, output / executable.name)
     if args.platform == PLATFORM_MACOS:
         create_macos_launcher(output)
 
     archive = output_root / f"{output.name}.zip"
     with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as zip_file:
-        for path in sorted(output.iterdir()):
-            zip_file.write(path, path.name)
+        for path in sorted(output.rglob("*")):
+            if path.is_file():
+                zip_file.write(path, path.relative_to(output).as_posix())
     print(f"Release: {output}\nArchive: {archive}")
 
 
