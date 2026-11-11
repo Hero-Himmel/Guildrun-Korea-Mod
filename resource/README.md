@@ -9,6 +9,8 @@
 - `icons/GuildrunKoreanPatcher.ico` — 패처 EXE 아이콘
 - `version.json` — 지원 게임 빌드와 원본 파일 해시, 패치 릴리즈 정보
 
+`source_files`의 원본 파일 해시는 기준 빌드 참고값이며, 패처의 설치 허용 여부를 판단하는 데 사용하지 않습니다.
+
 ## 릴리즈 버전 규칙
 
 `version.json`의 `release`는 `<게임 버전>-<알파벳>` 형식으로 표기합니다.

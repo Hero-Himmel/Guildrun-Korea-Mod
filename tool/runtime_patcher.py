@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import os
 import shutil
 import sys
@@ -15,7 +14,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from build_patch import RELEASE, VERSION, build_patch
+from build_patch import RELEASE, build_patch
 from game_layout import (
     GameLayout,
     current_platform,
@@ -42,11 +41,6 @@ def configure_console() -> None:
         pass
 
 
-def sha256(path: Path) -> str:
-    with path.open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
-
-
 def safe_path(root: Path, relative: Path | str) -> Path:
     root = root.resolve()
     target = (root / relative).resolve()
@@ -55,43 +49,15 @@ def safe_path(root: Path, relative: Path | str) -> Path:
     return target
 
 
-def load_source_hashes(layout: GameLayout) -> dict[str, set[str]]:
-    source_files = VERSION.get("source_files")
-    configured = (
-        source_files.get(layout.platform) if isinstance(source_files, dict) else None
-    )
-    expected_paths = {path.as_posix() for path in layout.source_files.values()}
-    if not isinstance(configured, dict) or set(configured) != expected_paths:
-        raise RuntimeError(
-            f"version.json의 {layout.platform} source_files 구성이 잘못되었습니다"
-        )
-    result: dict[str, set[str]] = {}
-    for relative, hashes in configured.items():
-        if (
-            not isinstance(hashes, list)
-            or not hashes
-            or not all(isinstance(value, str) for value in hashes)
-        ):
-            raise RuntimeError(f"version.json의 해시 목록이 잘못되었습니다: {relative}")
-        result[relative] = set(hashes)
-    return result
+def verify_source_files(layout: GameLayout) -> None:
+    """Require patch inputs without rejecting hotfixes whose hashes changed.
 
-
-def verify_source_files(layout: GameLayout) -> dict[str, str]:
-    allowed = load_source_hashes(layout)
-    observed: dict[str, str] = {}
+    build_patch validates the game structures before any installed file is replaced.
+    """
     for relative in layout.source_files.values():
         path = safe_path(layout.install_root, relative)
         if not path.is_file():
             raise RuntimeError(f"필수 게임 파일이 없습니다: {relative.as_posix()}")
-        digest = sha256(path)
-        observed[relative.as_posix()] = digest
-        if digest not in allowed[relative.as_posix()]:
-            raise RuntimeError(
-                f"지원하지 않는 게임 파일입니다: {relative.as_posix()}. "
-                "Steam 무결성 검사 후 다시 시도하세요"
-            )
-    return observed
 
 
 def replace_from_payload(
@@ -379,13 +345,13 @@ def main() -> int:
         print(f"Guildrun 한국어 패치 {RELEASE}")
         if args.action == "check":
             verify_source_files(layout)
-            print("[1/1] 호환성 테스트 완료.")
+            print("[1/1] 필수 게임 파일 확인 완료. 구조 호환성은 패치 생성 중 검사합니다.")
         else:
             progress = ProgressTimer()
             progress.start()
             try:
                 verify_source_files(layout)
-                progress.stage("[1/4] 호환성 테스트 완료.")
+                progress.stage("[1/4] 필수 게임 파일 확인 완료.")
                 install(layout, progress)
             finally:
                 elapsed = progress.stop()

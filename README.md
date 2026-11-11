@@ -4,6 +4,10 @@ Guildrun Demo **0.5.14**의 Windows와 macOS 빌드 **26438775**를 지원합니
 
 Guildrun을 한국어로 플레이할 수 있도록 제작한 비공식 한글 패치입니다.
 
+게임 원본 파일의 SHA-256 일치 여부로 설치를 제한하지 않습니다. 핫픽스로 체크섬이 바뀌어도
+패치를 생성할 수 있으며, 필요한 파일과 게임 데이터 구조는 별도로 확인합니다. 구조가 맞지 않으면
+게임 파일을 교체하기 전에 중단합니다. 새로 추가되거나 변경된 문구에는 번역 업데이트가 필요할 수 있습니다.
+
 ## 설치 방법
 
 Windows는 GitHub Release 파일을 사용하고, macOS는 아래 터미널 설치 명령을 사용합니다.
@@ -65,7 +69,7 @@ GitHub Release의 아키텍처별 macOS ZIP을 직접 내려받는 방법도 제
 - `tool/unity_patch.py` — Unity 번들·폰트·메타데이터·카탈로그 가공
 - `tool/game_layout.py` — Windows/macOS 게임 경로와 플랫폼별 파일 구조 탐색
 - `tool/build_patch.py` — 사용자의 Steam 원본 4개를 읽어 패치 파일 4개 생성
-- `tool/runtime_patcher.py` — 해시 검사·임시 생성·트랜잭션 교체·실패 시 롤백 담당
+- `tool/runtime_patcher.py` — 필수 파일 확인·임시 생성·트랜잭션 교체·실패 시 롤백 담당
 - `tool/package_release.py` — 원본 게임 파일 없이 운영체제별 실행 파일·ZIP 생성
 - `tool/verify_release.py` — 생성된 Release에 원본 게임 파일이 없는지와 무결성 검사
 - `install-macos.sh` — 최신 macOS 패처를 검증·임시 실행하는 설치 스크립트
