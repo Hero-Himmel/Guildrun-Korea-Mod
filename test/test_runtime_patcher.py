@@ -16,7 +16,8 @@ from game_layout import (  # noqa: E402
     detect_game_layout,
     release_target,
 )
-from runtime_patcher import replace_from_payload  # noqa: E402
+from runtime_patcher import install, replace_from_payload, verify_source_files  # noqa: E402
+from unity_patch import PatchCompatibilityError  # noqa: E402
 
 
 class GameLayoutTests(unittest.TestCase):
@@ -54,6 +55,50 @@ class TransactionTests(unittest.TestCase):
             path.write_bytes(data)
             contents[relative] = data
         return contents
+
+    def test_accepts_changed_source_files_on_each_platform(self) -> None:
+        for platform, definition in DEFINITIONS.items():
+            with self.subTest(platform=platform), tempfile.TemporaryDirectory() as temporary:
+                layout = GameLayout(Path(temporary), definition)
+                self.make_files(layout.install_root, layout, "unregistered-hotfix")
+
+                verify_source_files(layout)
+
+    def test_rejects_missing_or_directory_inputs(self) -> None:
+        for platform, definition in DEFINITIONS.items():
+            for missing in definition.source_files().values():
+                with (
+                    self.subTest(platform=platform, missing=missing),
+                    tempfile.TemporaryDirectory() as temporary,
+                ):
+                    layout = GameLayout(Path(temporary), definition)
+                    self.make_files(layout.install_root, layout, "original")
+                    path = layout.install_root / missing
+                    path.unlink()
+                    for directory in (False, True):
+                        if directory:
+                            path.mkdir()
+                        with self.assertRaisesRegex(RuntimeError, "필수 게임 파일이 없습니다"):
+                            verify_source_files(layout)
+
+    def test_incompatible_structure_never_replaces_game_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            layout = GameLayout(Path(temporary), DEFINITIONS["macos"])
+            originals = self.make_files(layout.install_root, layout, "hotfix")
+            with (
+                mock.patch(
+                    "runtime_patcher.build_patch",
+                    side_effect=PatchCompatibilityError("incompatible structure"),
+                ),
+                mock.patch("runtime_patcher.replace_from_payload") as replace,
+                self.assertRaisesRegex(PatchCompatibilityError, "incompatible structure"),
+            ):
+                verify_source_files(layout)
+                install(layout, mock.Mock())
+
+            replace.assert_not_called()
+            for relative, expected in originals.items():
+                self.assertEqual((layout.install_root / relative).read_bytes(), expected)
 
     def test_success_leaves_no_persistent_backup(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
